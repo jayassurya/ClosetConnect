@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Donations</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Find Donations</h2>
+        <div id="map"></div>
+
+        <h3>Nearby Donations</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Donor Name</th>
+                    <th>Clothing Type</th>
+                    <th>Location</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody id="donation-list"></tbody>
+        </table>
+
+        <div id="chat-box">
+            <h3>Chat with Donor</h3>
+            <div id="messages"></div>
+            <input type="text" id="message-input" placeholder="Type a message">
+            <button onclick="sendMessage()">Send</button>
+            <button onclick="closeChat()">Close</button>
+        </div>
+    </div>
+
+    <script type="module" src="firebase.js"></script>
+    <script type="module">
+        import { auth, checkAuth, sendMessage, openChat, closeChat, updateDonationList } from "./firebase.js";
+
+        checkAuth();
+        updateDonationList();
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
+</body>
+</html>
