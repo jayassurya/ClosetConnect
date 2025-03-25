@@ -57,7 +57,9 @@
             background-color: #c82333;
         }
     </style>
-    </head>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
 <body>
     <div class="container">
         <h2>Donate Clothes</h2>
@@ -67,32 +69,81 @@
             <input type="text" id="clothing-type" placeholder="Type of Clothing" required>
             <textarea id="address" placeholder="Your Address" required></textarea>
             <input type="file" id="clothing-images" class="file-input" accept="image/*" multiple required>
-                        <button type="submit">Submit Donation</button>
+            <button type="button" id="get-location">Use Current Location</button>
+            <div id="map"></div>
+            <button type="submit">Submit Donation</button>
         </form>
 
         <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
 
-        <script type="module" src="firebase.js"></script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script type="module" src="firebase.js"></script>
     <script type="module">
         import { auth, checkAuth, donateClothes, logout } from "./firebase.js";
 
         checkAuth(); // Ensure user is logged in
+
+        let latitude = null;
+        let longitude = null;
+        let map = null;
+        let marker = null;
+
+        document.getElementById("get-location").addEventListener("click", () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    latitude = position.coords.latitude;
+                    longitude = position.coords.longitude;
+
+                    // Display the map
+                    const mapDiv = document.getElementById("map");
+                    mapDiv.style.display = "block";
+
+                    // Initialize or update the map
+                    if (!map) {
+                        map = L.map('map').setView([latitude, longitude], 13);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; OpenStreetMap contributors'
+                        }).addTo(map);
+                    } else {
+                        map.setView([latitude, longitude], 13);
+                    }
+
+                    // Add or update the marker
+                    if (marker) {
+                        marker.setLatLng([latitude, longitude]);
+                    } else {
+                        marker = L.marker([latitude, longitude]).addTo(map);
+                    }
+
+                }, (error) => {
+                    alert("Error fetching location: " + error.message);
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        });
 
         document.getElementById("donation-form").addEventListener("submit", async (e) => {
             e.preventDefault();
             const donorName = document.getElementById("donor-name").value;
             const clothingType = document.getElementById("clothing-type").value;
             const address = document.getElementById("address").value;
-            const clothingImage = document.getElementById("clothing-image").files[0];
+            const clothingImages = document.getElementById("clothing-images").files;
 
-            if (!clothingImage) {
-                alert("Please upload an image of the clothing.");
+            if (!latitude || !longitude) {
+                alert("Please fetch your current location before submitting.");
+                return;
+            }
+
+            if (clothingImages.length === 0) {
+                alert("Please upload at least one image of the clothing.");
                 return;
             }
 
             // Handle the image upload and form submission
-            await donateClothes(donorName, clothingType, address, clothingImage);
+            await donateClothes(donorName, clothingType, address, latitude, longitude, clothingImages);
         });
     </script>
 </body>
