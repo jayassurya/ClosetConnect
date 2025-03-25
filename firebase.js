@@ -1,20 +1,20 @@
 // Import Firebase modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { 
-    getAuth, 
-    createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword, 
-    signOut 
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { 
-    getFirestore, 
-    collection, 
-    addDoc, 
-    serverTimestamp, 
-    query, 
-    orderBy, 
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    serverTimestamp,
+    query,
+    orderBy,
     onSnapshot,
-    GeoPoint // Import GeoPoint
+    GeoPoint
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
 
@@ -141,13 +141,20 @@ export function listenForMessages(callback) {
     });
 }
 
-// Event Listener for Donation Form Submission
-document.getElementById("donation-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const donorName = document.getElementById("donor-name").value;
-    const clothingType = document.getElementById("clothing-type").value;
-    const address = document.getElementById("address").value;
-    const clothingImages = document.getElementById("clothing-images").files;
+// Ensure the DOM is fully loaded before attaching event listeners
+document.addEventListener("DOMContentLoaded", () => {
+    const donationForm = document.getElementById("donation-form");
+    if (donationForm) {
+        donationForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const donorName = document.getElementById("donor-name").value;
+            const clothingType = document.getElementById("clothing-type").value;
+            const address = document.getElementById("address").value;
+            const clothingImages = document.getElementById("clothing-images").files;
 
-    await donateClothes(donorName, clothingType, address, clothingImages);
+            await donateClothes(donorName, clothingType, address, clothingImages);
+        });
+    } else {
+        console.error("Element with ID 'donation-form' not found.");
+    }
 });
