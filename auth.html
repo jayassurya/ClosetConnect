@@ -21,29 +21,29 @@
         <button id="logout-btn">Logout</button>
     </div>
 
-    <!-- Firebase JS -->
+<!-- Firebase JS -->
     <script type="module" src="firebase.js"></script>
-    
+
     <!-- Authentication JS -->
     <script type="module">
         import { signUpUser, loginUser, logoutUser } from "./firebase.js";
 
         // Wait for the DOM to load before adding event listeners
         document.addEventListener("DOMContentLoaded", function () {
-            
-            // Signup Event
-            document.getElementById("signup-btn").addEventListener("click", function () {
-                const email = document.getElementById("signup-email").value;
-                const password = document.getElementById("signup-password").value;
-                signUpUser(email, password);
-            });
 
-            // Login Event
-            document.getElementById("login-btn").addEventListener("click", function () {
-                const email = document.getElementById("login-email").value;
-                const password = document.getElementById("login-password").value;
-                loginUser(email, password);
-            });
+// Signup Event
+        document.getElementById("signup-btn").addEventListener("click", function () {
+            const email = document.getElementById("signup-email").value;
+            const password = document.getElementById("signup-password").value;
+            signUpUser(email, password);
+        });
+
+// Login Event
+        document.getElementById("login-btn").addEventListener("click", function () {
+            const email = document.getElementById("login-email").value;
+            const password = document.getElementById("login-password").value;
+            loginUser(email, password);
+});
 
             // Logout Event
             document.getElementById("logout-btn").addEventListener("click", function () {
