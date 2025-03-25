@@ -1,5 +1,4 @@
 // Import Firebase modules
-import { auth } from './firebase.js';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import {
     getAuth,
