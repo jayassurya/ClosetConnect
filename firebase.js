@@ -14,7 +14,7 @@ import {
     query, 
     orderBy, 
     onSnapshot,
-    GeoPoint 
+    GeoPoint // ✅ Ensure GeoPoint is properly imported
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
 
@@ -23,7 +23,7 @@ const firebaseConfig = {
     apiKey: "AIzaSyCQzCggLBwifNMui3rmnPrVG1FxbX62SS4",
     authDomain: "closet-connect-d9e02.firebaseapp.com",
     projectId: "closet-connect-d9e02",
-    storageBucket: "closet-connect-d9e02.firebasestorage.app",
+    storageBucket: "closet-connect-d9e02.appspot.com", // ✅ Fixed storage URL
     messagingSenderId: "1046271828871",
     appId: "1:1046271828871:web:df950725896a0eedab2922",
     measurementId: "G-6139RRJBE6"
@@ -63,6 +63,15 @@ export function logoutUser() {
     }).catch((error) => alert(error.message));
 }
 
+// ✅ Ensure users are logged in before accessing pages
+export function checkAuth() {
+    onAuthStateChanged(auth, (user) => {
+        if (!user) {
+            window.location.href = "auth.html"; // Redirect to login if not authenticated
+        }
+    });
+}
+
 // ✅ Donation Function with Geolocation
 export async function donateClothes(donorName, clothingType, address, clothingImages) {
     if (!donorName || !clothingType || !address || clothingImages.length === 0) {
@@ -72,7 +81,7 @@ export async function donateClothes(donorName, clothingType, address, clothingIm
 
     navigator.geolocation.getCurrentPosition(async (position) => {
         const { latitude, longitude } = position.coords;
-        const location = new GeoPoint(latitude, longitude);
+        const location = new GeoPoint(latitude, longitude); // ✅ Ensure proper GeoPoint usage
 
         try {
             const imageUrls = [];
@@ -87,7 +96,7 @@ export async function donateClothes(donorName, clothingType, address, clothingIm
                 donorName,
                 clothingType,
                 address,
-                location,
+                location, // ✅ Stores GeoPoint properly
                 imageUrls,
                 timestamp: serverTimestamp()
             });
