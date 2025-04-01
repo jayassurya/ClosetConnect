@@ -71,7 +71,7 @@ export function checkAuth() {
 
 // ✅ Donation Function (without image upload)
 export async function donateClothes(donorName, clothingType, address) {
-    if (!donorName || !clothingType || !address) {
+    if (!donorName || !clothingType || !address || !contact) {
         alert("Please fill in all fields.");
         return;
     }
@@ -81,6 +81,7 @@ export async function donateClothes(donorName, clothingType, address) {
             donorName,
             clothingType,
             address,
+            contact,
             timestamp: serverTimestamp()
         });
 
@@ -109,6 +110,7 @@ export function updateDonationList() {
                 <td>${donation.donorName}</td>
                 <td>${donation.clothingType}</td>
                 <td>${donation.address}</td>
+                <td>${donation.contact}</td>
             `;
 
             donationListElem.appendChild(row);
