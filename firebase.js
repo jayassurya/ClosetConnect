@@ -13,8 +13,11 @@ import {
     serverTimestamp, 
     query, 
     orderBy, 
-    onSnapshot
+    onSnapshot,
+    doc, 
+    deleteDoc
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
 
 // ✅ Firebase Configuration
 const firebaseConfig = {
@@ -31,6 +34,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app);
 
 // ✅ Authentication
 export async function signUpUser(email, password) {
@@ -69,30 +73,6 @@ export function checkAuth() {
     });
 }
 
-// ✅ Donation Function (without image upload)
-export async function donateClothes(donorName, clothingType, address) {
-    if (!donorName || !clothingType || !address || !contact) {
-        alert("Please fill in all fields.");
-        return;
-    }
-
-    try {
-        await addDoc(collection(db, "donations"), {
-            donorName,
-            clothingType,
-            address,
-            contact,
-            timestamp: serverTimestamp()
-        });
-
-        alert("Donation submitted successfully!");
-    } catch (error) {
-        console.error("Error donating:", error);
-        alert("Failed to submit donation.");
-    }
-}
-
-
 // ✅ Donation Deletion Function (allow donors to delete their donations)
 export async function deleteDonation(donationId) {
     try {
@@ -124,7 +104,6 @@ export function updateDonationList() {
                 <td>${donation.donorName}</td>
                 <td>${donation.clothingType}</td>
                 <td>${donation.address}</td>
-                <td>${donation.contact}</td>
                 <td><button class="delete-btn" data-id="${doc.id}">Delete</button></td>
             `;
 
