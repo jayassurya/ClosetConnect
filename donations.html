@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Donations</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Styling for donation list page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f1f1f1;
+        }
+        button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Your Donations</h2>
+
+        <h3>Donated Clothes List</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Donor Name</th>
+                    <th>Clothing Type</th>
+                    <th>Address</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="donation-list"></tbody>
+        </table>
+    </div>
+
+    <script type="module" src="firebase.js"></script>
+    <script type="module">
+        import { checkAuth, updateDonationList } from "./firebase.js";
+
+        checkAuth(); // Ensure user is logged in
+
+        // Update donation list
+        updateDonationList();
+    </script>
+</body>
+</html>
