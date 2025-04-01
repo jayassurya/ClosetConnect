@@ -1,7 +1,7 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
-    background: url(https://img.freepik.com/free-vector/flat-world-humanitarian-day-background_23-2149456286.jpg) no-repeat center center fixed;
+    background: url('https://img.freepik.com/free-vector/flat-world-humanitarian-day-background_23-2149456286.jpg') no-repeat center center fixed;
 }
 .container {
     width: 80%;
