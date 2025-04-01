@@ -13,17 +13,16 @@ import {
     serverTimestamp, 
     query, 
     orderBy, 
-    onSnapshot,
-    GeoPoint // ✅ Ensure GeoPoint is properly imported
+    onSnapshot
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
 
-// ✅ Firebase Configuration (Replace with your actual details)
+// ✅ Firebase Configuration
 const firebaseConfig = {
     apiKey: "AIzaSyCQzCggLBwifNMui3rmnPrVG1FxbX62SS4",
     authDomain: "closet-connect-d9e02.firebaseapp.com",
     projectId: "closet-connect-d9e02",
-    storageBucket: "closet-connect-d9e02.appspot.com", // ✅ Fixed storage URL
+    storageBucket: "closet-connect-d9e02.appspot.com",
     messagingSenderId: "1046271828871",
     appId: "1:1046271828871:web:df950725896a0eedab2922",
     measurementId: "G-6139RRJBE6"
@@ -59,7 +58,7 @@ export async function loginUser(email, password) {
 export function logoutUser() {
     signOut(auth).then(() => {
         alert("Logged out successfully!");
-        window.location.href = "auth.html";
+        window.location.href = "auth.html"; // ✅ Redirects properly
     }).catch((error) => alert(error.message));
 }
 
@@ -72,42 +71,33 @@ export function checkAuth() {
     });
 }
 
-// ✅ Donation Function with Geolocation
+// ✅ Donation Function (without location)
 export async function donateClothes(donorName, clothingType, address, clothingImages) {
     if (!donorName || !clothingType || !address || clothingImages.length === 0) {
         alert("Please fill in all fields and upload at least one image.");
         return;
     }
 
-    navigator.geolocation.getCurrentPosition(async (position) => {
-        const { latitude, longitude } = position.coords;
-        const location = new GeoPoint(latitude, longitude); // ✅ Ensure proper GeoPoint usage
-
-        try {
-            const imageUrls = [];
-            for (const image of clothingImages) {
-                const storageRef = ref(storage, `clothing_images/${image.name}`);
-                const snapshot = await uploadBytes(storageRef, image);
-                const imageUrl = await getDownloadURL(snapshot.ref);
-                imageUrls.push(imageUrl);
-            }
-
-            await addDoc(collection(db, "donations"), {
-                donorName,
-                clothingType,
-                address,
-                location, // ✅ Stores GeoPoint properly
-                imageUrls,
-                timestamp: serverTimestamp()
-            });
-
-            alert("Donation submitted successfully!");
-        } catch (error) {
-            console.error("Error donating:", error);
-            alert("Failed to submit donation.");
+    try {
+        const imageUrls = [];
+        for (const image of clothingImages) {
+            const storageRef = ref(storage, `clothing_images/${image.name}`);
+            const snapshot = await uploadBytes(storageRef, image);
+            const imageUrl = await getDownloadURL(snapshot.ref);
+            imageUrls.push(imageUrl);
         }
-    }, (error) => {
-        console.error("Error obtaining location:", error);
-        alert("Failed to obtain location.");
-    });
+
+        await addDoc(collection(db, "donations"), {
+            donorName,
+            clothingType,
+            address,
+            imageUrls,
+            timestamp: serverTimestamp()
+        });
+
+        alert("Donation submitted successfully!");
+    } catch (error) {
+        console.error("Error donating:", error);
+        alert("Failed to submit donation.");
+    }
 }
