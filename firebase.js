@@ -86,8 +86,8 @@ export async function deleteDonation(donationId) {
     }
 }
 
-export async function donateClothes(donorName, clothingType, address) {
-    if (!donorName || !clothingType || !address) {
+export async function donateClothes(donorName, clothingType, address,contact) {
+    if (!donorName || !clothingType || !address || !contact) {
         alert("Please fill in all fields.");
         return;
     }
