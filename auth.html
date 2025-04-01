@@ -7,16 +7,20 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h2>Signup</h2>
-        <input type="email" id="signup-email" placeholder="Email">
-        <input type="password" id="signup-password" placeholder="Password">
-        <button id="signup-btn">Sign Up</button>
+    <div class="auth-container">
+        <div class="form-box">
+            <h2>Signup</h2>
+            <input type="email" id="signup-email" placeholder="Email">
+            <input type="password" id="signup-password" placeholder="Password">
+            <button id="signup-btn" class="btn primary-btn">Sign Up</button>
+        </div>
 
-        <h2>Login</h2>
-        <input type="email" id="login-email" placeholder="Email">
-        <input type="password" id="login-password" placeholder="Password">
-        <button id="login-btn">Login</button>
+        <div class="form-box">
+            <h2>Login</h2>
+            <input type="email" id="login-email" placeholder="Email">
+            <input type="password" id="login-password" placeholder="Password">
+            <button id="login-btn" class="btn secondary-btn">Login</button>
+        </div>
     </div>
 
     <script type="module" src="firebase.js"></script>
