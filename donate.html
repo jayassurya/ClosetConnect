@@ -57,8 +57,6 @@
             background-color: #c82333;
         }
     </style>
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
     <div class="container">
@@ -69,61 +67,17 @@
             <input type="text" id="clothing-type" placeholder="Type of Clothing" required>
             <textarea id="address" placeholder="Your Address" required></textarea>
             <input type="file" id="clothing-images" class="file-input" accept="image/*" multiple required>
-            <button type="button" id="get-location">Use Current Location</button>
-            <div id="map"></div>
             <button type="submit">Submit Donation</button>
         </form>
 
-        <button class="logout-btn" onclick="logout()">Logout</button>
+        <button class="logout-btn" id="logout-btn">Logout</button>
     </div>
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script type="module" src="firebase.js"></script>
     <script type="module">
-        import { auth, checkAuth, donateClothes, logout } from "./firebase.js";
+        import { checkAuth, donateClothes, logoutUser } from "./firebase.js";
 
         checkAuth(); // Ensure user is logged in
-
-        let latitude = null;
-        let longitude = null;
-        let map = null;
-        let marker = null;
-
-        document.getElementById("get-location").addEventListener("click", () => {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((position) => {
-                    latitude = position.coords.latitude;
-                    longitude = position.coords.longitude;
-
-                    // Display the map
-                    const mapDiv = document.getElementById("map");
-                    mapDiv.style.display = "block";
-
-                    // Initialize or update the map
-                    if (!map) {
-                        map = L.map('map').setView([latitude, longitude], 13);
-                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                            attribution: '&copy; OpenStreetMap contributors'
-                        }).addTo(map);
-                    } else {
-                        map.setView([latitude, longitude], 13);
-                    }
-
-                    // Add or update the marker
-                    if (marker) {
-                        marker.setLatLng([latitude, longitude]);
-                    } else {
-                        marker = L.marker([latitude, longitude]).addTo(map);
-                    }
-
-                }, (error) => {
-                    alert("Error fetching location: " + error.message);
-                });
-            } else {
-                alert("Geolocation is not supported by this browser.");
-            }
-        });
 
         document.getElementById("donation-form").addEventListener("submit", async (e) => {
             e.preventDefault();
@@ -132,19 +86,16 @@
             const address = document.getElementById("address").value;
             const clothingImages = document.getElementById("clothing-images").files;
 
-            if (!latitude || !longitude) {
-                alert("Please fetch your current location before submitting.");
-                return;
-            }
-
             if (clothingImages.length === 0) {
                 alert("Please upload at least one image of the clothing.");
                 return;
             }
 
             // Handle the image upload and form submission
-            await donateClothes(donorName, clothingType, address, latitude, longitude, clothingImages);
+            await donateClothes(donorName, clothingType, address, clothingImages);
         });
+
+        document.getElementById("logout-btn").addEventListener("click", logoutUser);
     </script>
 </body>
 </html>
