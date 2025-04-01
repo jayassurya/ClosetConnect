@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase
 import { 
     getAuth, 
     createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword, 
+    signInWithEmailAndPassword,   
     signOut,
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
@@ -15,7 +15,6 @@ import {
     orderBy, 
     onSnapshot
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
 
 // ✅ Firebase Configuration
 const firebaseConfig = {
@@ -32,7 +31,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const storage = getStorage(app);
 
 // ✅ Authentication
 export async function signUpUser(email, password) {
@@ -71,27 +69,18 @@ export function checkAuth() {
     });
 }
 
-// ✅ Donation Function (without location)
-export async function donateClothes(donorName, clothingType, address, clothingImages) {
-    if (!donorName || !clothingType || !address || clothingImages.length === 0) {
-        alert("Please fill in all fields and upload at least one image.");
+// ✅ Donation Function (without image upload)
+export async function donateClothes(donorName, clothingType, address) {
+    if (!donorName || !clothingType || !address) {
+        alert("Please fill in all fields.");
         return;
     }
 
     try {
-        const imageUrls = [];
-        for (const image of clothingImages) {
-            const storageRef = ref(storage, `clothing_images/${image.name}`);
-            const snapshot = await uploadBytes(storageRef, image);
-            const imageUrl = await getDownloadURL(snapshot.ref);
-            imageUrls.push(imageUrl);
-        }
-
         await addDoc(collection(db, "donations"), {
             donorName,
             clothingType,
             address,
-            imageUrls,
             timestamp: serverTimestamp()
         });
 
@@ -100,4 +89,29 @@ export async function donateClothes(donorName, clothingType, address, clothingIm
         console.error("Error donating:", error);
         alert("Failed to submit donation.");
     }
+}
+
+// ✅ Update Donation List (without images)
+export function updateDonationList() {
+    const donationListElem = document.getElementById("donation-list");
+
+    // Get donations from Firestore
+    const q = query(collection(db, "donations"), orderBy("timestamp", "desc"));
+    onSnapshot(q, (querySnapshot) => {
+        donationListElem.innerHTML = ""; // Clear the current list
+
+        querySnapshot.forEach((doc) => {
+            const donation = doc.data();
+            const row = document.createElement("tr");
+
+            // Add donation data to row
+            row.innerHTML = `
+                <td>${donation.donorName}</td>
+                <td>${donation.clothingType}</td>
+                <td>${donation.address}</td>
+            `;
+
+            donationListElem.appendChild(row);
+        });
+    });
 }
