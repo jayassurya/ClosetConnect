@@ -57,11 +57,14 @@ export async function loginUser(email, password) {
     }
 }
 
+// ✅ Logout Function
 export function logoutUser() {
     signOut(auth).then(() => {
         alert("Logged out successfully!");
-        window.location.href = "auth.html"; // ✅ Redirects properly
-    }).catch((error) => alert(error.message));
+        window.location.href = "auth.html"; // Redirect to login page
+    }).catch((error) => {
+        alert("Logout failed: " + error.message);
+    });
 }
 
 // ✅ Ensure users are logged in before accessing pages
