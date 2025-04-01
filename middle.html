@@ -12,13 +12,17 @@
         <p>Your platform to donate and request clothing items.</p>
         <button class="btn donate-btn" onclick="location.href='donate.html'">Donate Clothes</button>
         <button class="btn request-btn" onclick="location.href='request.html'">Request Clothes</button>
-        <button class="logout-btn" onclick="logoutUser()">Logout</button>
+        <button id="logout-btn" class="logout-btn">Logout</button> <!-- ✅ ADDED ID -->
     </div>
 
-    <script type="module" src="firebase.js"></script>
     <script type="module">
         import { logoutUser, checkAuth } from "./firebase.js";        
-        document.getElementById("logout-btn").addEventListener("click", logoutUser);
+
+        // ✅ Wait for DOM to load before attaching event listener
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("logout-btn").addEventListener("click", logoutUser);
+        });
+
         checkAuth();
     </script>
 </body>
