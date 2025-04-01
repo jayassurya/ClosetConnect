@@ -86,6 +86,28 @@ export async function deleteDonation(donationId) {
     }
 }
 
+export async function donateClothes(donorName, clothingType, address) {
+    if (!donorName || !clothingType || !address) {
+        alert("Please fill in all fields.");
+        return;
+    }
+
+    try {
+        await addDoc(collection(db, "donations"), {
+            donorName,
+            clothingType,
+            address,
+            contact,
+            timestamp: serverTimestamp()
+        });
+
+        alert("Donation submitted successfully!");
+    } catch (error) {
+        console.error("Error donating:", error);
+        alert("Failed to submit donation.");
+    }
+}
+
 // ✅ Update Donation List (Add delete button for each donation)
 export function updateDonationList() {
     const donationListElem = document.getElementById("donation-list");
