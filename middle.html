@@ -17,7 +17,8 @@
 
     <script type="module" src="firebase.js"></script>
     <script type="module">
-        import { logoutUser, checkAuth } from "./firebase.js";
+        import { logoutUser, checkAuth } from "./firebase.js";        
+        document.getElementById("logout-btn").addEventListener("click", logoutUser);
         checkAuth();
     </script>
 </body>
