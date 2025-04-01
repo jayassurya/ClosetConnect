@@ -92,31 +92,6 @@ export async function donateClothes(donorName, clothingType, address) {
     }
 }
 
-// ✅ Update Donation List (without images)
-export function updateDonationList() {
-    const donationListElem = document.getElementById("donation-list");
-
-    // Get donations from Firestore
-    const q = query(collection(db, "donations"), orderBy("timestamp", "desc"));
-    onSnapshot(q, (querySnapshot) => {
-        donationListElem.innerHTML = ""; // Clear the current list
-
-        querySnapshot.forEach((doc) => {
-            const donation = doc.data();
-            const row = document.createElement("tr");
-
-            // Add donation data to row
-            row.innerHTML = `
-                <td>${donation.donorName}</td>
-                <td>${donation.clothingType}</td>
-                <td>${donation.address}</td>
-                <td>${donation.contact}</td>
-            `;
-
-            donationListElem.appendChild(row);
-        });
-    });
-}
 
 // ✅ Donation Deletion Function (allow donors to delete their donations)
 export async function deleteDonation(donationId) {
@@ -149,6 +124,7 @@ export function updateDonationList() {
                 <td>${donation.donorName}</td>
                 <td>${donation.clothingType}</td>
                 <td>${donation.address}</td>
+                <td>${donation.contact}</td>
                 <td><button class="delete-btn" data-id="${doc.id}">Delete</button></td>
             `;
 
