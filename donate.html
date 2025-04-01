@@ -3,92 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Donate Clothes</title>
+    <title>Find Donations</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Modern form styling */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px 40px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 500px;
-        }
-        h2 {
-            margin-bottom: 20px;
-            color: #333;
-        }
-        input, textarea, button {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-        .logout-btn {
-            background-color: #dc3545;
-            margin-top: 20px;
-        }
-        .logout-btn:hover {
-            background-color: #c82333;
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Donate Clothes</h2>
+    <div class="container table-container">
+        <h2>Find Donations</h2>
 
-        <form id="donation-form">
-            <input type="text" id="donor-name" placeholder="Your Name" required>
-            <input type="text" id="clothing-type" placeholder="Type of Clothing" required>
-            <textarea id="address" placeholder="Your Address" required></textarea>
-            <input type="number" id="contact-no" placeholder="Mobile Number" required>
-            <!-- Removed the image upload input -->
-            <button type="submit">Submit Donation</button>
-        </form>
-
-        <button class="logout-btn" id="logout-btn">Logout</button>
+        <h3>Nearby Donations</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Donor Name</th>
+                    <th>Clothing Type</th>
+                    <th>Address</th>
+                    <th>Contact No</th>
+                </tr>
+            </thead>
+            <tbody id="donation-list"></tbody>
+        </table>
     </div>
 
     <script type="module" src="firebase.js"></script>
     <script type="module">
-        import { checkAuth, donateClothes, logoutUser } from "./firebase.js";
+        import { checkAuth, updateDonationList } from "./firebase.js";
 
-        checkAuth(); // Ensure user is logged in
-
-        document.getElementById("donation-form").addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const donorName = document.getElementById("donor-name").value;
-            const clothingType = document.getElementById("clothing-type").value;
-            const address = document.getElementById("address").value;
-            const contact = document.getElementById("contact-no").value;
-
-            // Handle the form submission
-            await donateClothes(donorName, clothingType, address,contact);
-        });
-
-        document.getElementById("logout-btn").addEventListener("click", logoutUser);
+        checkAuth();
+        updateDonationList();
     </script>
 </body>
 </html>
