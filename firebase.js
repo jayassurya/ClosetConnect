@@ -104,6 +104,7 @@ export function updateDonationList() {
                 <td>${donation.donorName}</td>
                 <td>${donation.clothingType}</td>
                 <td>${donation.address}</td>
+                <td>${donation.contact}</td>
                 <td><button class="delete-btn" data-id="${doc.id}">Delete</button></td>
             `;
 
