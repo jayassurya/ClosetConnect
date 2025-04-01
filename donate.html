@@ -3,14 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Find Donations</title>
+    <title>Closet Connect | Donate</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container table-container">
-        <h2>Find Donations</h2>
+    <div class="container">
+        <h1>Donate Clothes</h1>
+        <form id="donation-form">
+            <input type="text" id="donor-name" placeholder="Your Name" required>
+            <input type="text" id="clothing-type" placeholder="Clothing Type" required>
+            <input type="text" id="address" placeholder="Address" required>
+            <input type="text" id="contact" placeholder="Contact No" required>
+            <button type="submit" id="donate-btn" class="primary-btn">Donate Now</button>
+        </form>
 
-        <h3>Nearby Donations</h3>
+        <h2>Available Donations</h2>
         <table>
             <thead>
                 <tr>
@@ -26,9 +33,23 @@
 
     <script type="module" src="firebase.js"></script>
     <script type="module">
-        import { checkAuth, updateDonationList } from "./firebase.js";
+        import { checkAuth, donateClothes, updateDonationList } from "./firebase.js";
 
-        checkAuth();
+        checkAuth(); // Ensure user is logged in
+
+        // Handle donation form submission
+        document.getElementById("donation-form").addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const donorName = document.getElementById("donor-name").value;
+            const clothingType = document.getElementById("clothing-type").value;
+            const address = document.getElementById("address").value;
+            const contact = document.getElementById("contact").value;
+
+            donateClothes(donorName, clothingType, address, contact);
+        });
+
+        // Update the donation list
         updateDonationList();
     </script>
 </body>
