@@ -46,9 +46,6 @@
         button:hover {
             background-color: #218838;
         }
-        .file-input {
-            padding: 3px;
-        }
         .logout-btn {
             background-color: #dc3545;
             margin-top: 20px;
@@ -66,7 +63,7 @@
             <input type="text" id="donor-name" placeholder="Your Name" required>
             <input type="text" id="clothing-type" placeholder="Type of Clothing" required>
             <textarea id="address" placeholder="Your Address" required></textarea>
-            <input type="file" id="clothing-images" class="file-input" accept="image/*" multiple required>
+            <!-- Removed the image upload input -->
             <button type="submit">Submit Donation</button>
         </form>
 
@@ -84,15 +81,9 @@
             const donorName = document.getElementById("donor-name").value;
             const clothingType = document.getElementById("clothing-type").value;
             const address = document.getElementById("address").value;
-            const clothingImages = document.getElementById("clothing-images").files;
 
-            if (clothingImages.length === 0) {
-                alert("Please upload at least one image of the clothing.");
-                return;
-            }
-
-            // Handle the image upload and form submission
-            await donateClothes(donorName, clothingType, address, clothingImages);
+            // Handle the form submission
+            await donateClothes(donorName, clothingType, address);
         });
 
         document.getElementById("logout-btn").addEventListener("click", logoutUser);
