@@ -19,7 +19,7 @@
                     <th>Clothing Type</th>
                     <th>Address</th>
                     <th>Contact No</th>
-                    <th>Action</th>
+                    
                 </tr>
             </thead>
             <tbody id="donation-list"></tbody>
@@ -28,7 +28,7 @@
 
     <script type="module" src="firebase.js"></script>
     <script type="module">
-        import { checkAuth, updateDonationList } from "./firebase.js";
+        import { checkAuth, updateDonationLists } from "./firebase.js";
 
         checkAuth(); // Ensure user is logged in
 
