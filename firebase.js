@@ -146,3 +146,31 @@ export function updateDonationList() {
         });
     });
 }
+
+export function updateDonationLists() {
+    const donationListElem = document.getElementById("donation-list");
+
+    // Get donations from Firestore
+    const q = query(collection(db, "donations"), orderBy("timestamp", "desc"));
+    onSnapshot(q, (querySnapshot) => {
+        donationListElem.innerHTML = ""; // Clear the current list
+
+        querySnapshot.forEach((doc) => {
+            const donation = doc.data();
+            const row = document.createElement("tr");
+
+            // Add donation data to row
+            row.innerHTML = `
+                <td>${donation.donorName}</td>
+                <td>${donation.clothingType}</td>
+                <td>${donation.address}</td>
+                <td>${donation.contact}</td>
+                
+            `;
+
+            donationListElem.appendChild(row);
+
+            
+        });
+    });
+}
